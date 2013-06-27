@@ -1,0 +1,16 @@
+{% include "pface/base.html" %}
+{% block title %}PFace - Print Page{% endblock %}
+{% block body %}
+<h1>Uploaded Files</h1>
+<ul>
+{% for file in files %}
+   <li>{{ file.gcode_file.name }} - {{ file.uploaded }}</li>
+{% endfor %}
+</ul>
+
+<h1>Upload another file?</h1>
+<form action="{% url "printer" %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form }}
+<p><input type="submit" value="Upload" /></p>
+{% endblock %}
