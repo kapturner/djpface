@@ -9,6 +9,15 @@ class Prints(models.Model):
 class File(models.Model):
    gcode_file = models.FileField(upload_to=os.path.join(os.path.abspath('.'), 'gcode_uploads'))
    uploaded = models.DateTimeField(auto_now_add=True)
+   
+   # Overwrite delete
+   def delete(self, *args, **kwargs):
+        # You have to prepare what you need before delete the model
+        storage, path = self.gcode_file.storage, self.gcode_file.path
+        # Delete the model before the file
+        super(File, self).delete(*args, **kwargs)
+        # Delete the file after the model
+        storage.delete(path)
 
 class Printer(models.Model):
    printer_name = models.CharField(max_length=128)

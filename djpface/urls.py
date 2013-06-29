@@ -4,5 +4,5 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^printer/', 'pface.views.printer', name='printer'),
+    url(r'^printer/', include('pface.urls')),
 )

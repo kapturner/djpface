@@ -1,16 +1,21 @@
 {% include "pface/base.html" %}
 {% block title %}PFace - Print Page{% endblock %}
 {% block body %}
+{% if files %}
 <h1>Uploaded Files</h1>
 <ul>
 {% for file in files %}
-   <li>{{ file.gcode_file.name }} - {{ file.uploaded }}</li>
+   <li>[<a href="{% url "rmgcode" file.id %}">Delete</a>]{{ file.gcode_file.name }} - {{ file.uploaded }}</li>
 {% endfor %}
 </ul>
+{% endif %}
 
-<h1>Upload another file?</h1>
+<h1>Upload {% if files %}another{% endif %} file?</h1>
 <form action="{% url "printer" %}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
 {{ form }}
 <p><input type="submit" value="Upload" /></p>
+
+<textarea cols="80" rows="20" readonly="readonly">
+</textarea>
 {% endblock %}
