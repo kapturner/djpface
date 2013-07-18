@@ -1,3 +1,4 @@
+import os
 # Django settings for djpface project.
 
 DEBUG = True
@@ -123,6 +124,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'pface',
 )
+
+# location for pronsole
+PRONSOLE_PATH = os.path.join('pface', 'printrun', 'pronsole.py')
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

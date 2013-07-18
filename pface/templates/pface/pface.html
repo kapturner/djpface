@@ -1,11 +1,48 @@
-{% include "pface/base.html" %}
+{% extends "pface/base.html" %}
 {% block title %}PFace - Print Page{% endblock %}
+{% block js %}
+<script type="text/javascript">
+$( document ).ready(function() {
+	// this is the id of the submit button
+	$("#commandSendButton").click(function() {
+	    var url = "{% url "command" %}"; // the script where you handle the form input.
+	
+	    $.ajax({
+	           type: "POST",
+	           url: url,
+	           data: $("#commandForm").serialize(), // serializes the form's elements.
+	           success: function(data)
+	           {
+	           	   var psconsole = $('#console');
+	               psconsole.val( psconsole.val() + data); // show response
+	               // auto scroll
+				   psconsole.scrollTop(
+					  psconsole[0].scrollHeight - psconsole.height()
+				   );
+	           }
+	         });
+		$("#command_text").val('');
+	    return false; // avoid to execute the actual submit of the form.
+	});
+	$("#command_text").keypress(function(event) {
+    	if (event.which == 13) {
+        	event.preventDefault();
+        	$("#commandSendButton").click();
+    	}
+	});
+	$(".loadFile").click(function() {
+		$("#command_text").val($(this).val());
+		$("#commandSendButton").click();
+	});
+});
+</script>
+{% endblock %}
 {% block body %}
 {% if files %}
 <h1>Uploaded Files</h1>
 <ul>
 {% for file in files %}
-   <li>[<a href="{% url "rmgcode" file.id %}">Delete</a>]{{ file.gcode_file.name }} - {{ file.uploaded }}</li>
+   <li>[<a href="{% url "rmgcode" file.id %}">Delete</a>]&nbsp;<input type="button" value="Load {{ file.gcode_file.name }}" class="loadFile" /> - {{ file.uploaded }}</li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -15,7 +52,13 @@
 {% csrf_token %}
 {{ form }}
 <p><input type="submit" value="Upload" /></p>
+</form>
 
-<textarea cols="80" rows="20" readonly="readonly">
-</textarea>
+<textarea id="console" style="width: 85%;" rows="20" readonly="readonly">
+</textarea><br />
+<form id="commandForm" action="" method="post">
+{% csrf_token %}
+<input type="text" name="command_text" id="command_text" />
+<input id="commandSendButton" type="button" value="Send" />
+</form>
 {% endblock %}

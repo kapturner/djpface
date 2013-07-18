@@ -4,6 +4,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('pface.views',
     url(r'^$', 'printer', name='printer'),
+    url(r'^gcode/rm/$', 'rmgcode', name='rmgcodebad'),
     url(r'^gcode/rm/(?P<id>\d+)/', 'rmgcode', name='rmgcode'),
-    url(r'^printer/command/', 'command', name='command'),
+    url(r'^command/', 'command', name='command'),
 )
